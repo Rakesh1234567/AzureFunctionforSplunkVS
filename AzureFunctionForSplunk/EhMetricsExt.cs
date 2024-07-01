@@ -25,7 +25,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
