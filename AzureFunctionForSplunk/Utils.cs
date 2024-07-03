@@ -24,6 +24,7 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
+
 using Azure.Communication.Identity;
 using Azure.Core;
 using Microsoft.Azure.WebJobs;
@@ -210,21 +211,21 @@ namespace AzureFunctionForSplunk
             AccessToken accessToken=new AccessToken();
             try
             {
-                //var azureServiceTokenProvider = new AzureServiceTokenProvider(
-                //    connectionString: astpConnection
-                //);
+               // var azureServiceTokenProvider = new AzureServiceTokenProvider(
+               //     connectionString: astpConnection
+               // );
 
-                //accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(serviceResourceIDURI);
+               // accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(serviceResourceIDURI);
 
-                //var tokenCredential = new DefaultAzureCredential(new DefaultAzureCredentialOptions() { });
-                // accessToken = await tokenCredential.GetTokenAsync(
-                //    new TokenRequestContext(scopes: new string[] { $"ResourceId {serviceResourceIDURI}" }) { }
-                //);
+               // var tokenCredential = new DefaultAzureCredential(new DefaultAzureCredentialOptions() { });
+               // accessToken = await tokenCredential.GetTokenAsync(
+               //    new TokenRequestContext(scopes: new string[] { $"ResourceId {serviceResourceIDURI}" }) { }
+               //);
 
 
                 // This code demonstrates how to retrieve your connection string
                 // from an environment variable.
-               
+
                 var commClient = new CommunicationIdentityClient(astpConnection);
                 var identityResponse = await commClient.CreateUserAsync();
                 var identity = identityResponse.Value;
