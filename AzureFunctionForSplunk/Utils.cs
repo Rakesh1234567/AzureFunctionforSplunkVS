@@ -186,6 +186,7 @@ namespace AzureFunctionForSplunk
 
         public static async Task obProxy(List<string> standardizedEvents, ILogger log)
         {
+            log.LogInformation($"\n[5064]:Indide function obProxy");
             string proxyAddress = Utils.getEnvironmentVariable("proxyAddress");
             if (proxyAddress.Length == 0)
             {
@@ -206,7 +207,7 @@ namespace AzureFunctionForSplunk
             {
                 astpConnection = Utils.getEnvironmentVariable("astpConnectionString");
             }
-            // log.LogInformation($"devEnvironment: {devEnvironment}, astpConnection: {astpConnection}");
+            log.LogInformation($"devEnvironment: {devEnvironment}, astpConnection: {astpConnection}");
 
             AccessToken accessToken=new AccessToken();
             try
@@ -229,11 +230,14 @@ namespace AzureFunctionForSplunk
                 var commClient = new CommunicationIdentityClient(astpConnection);
                 var identityResponse = await commClient.CreateUserAsync();
                 var identity = identityResponse.Value;
-                Console.WriteLine($"\nCreated an identity with ID: {identity.Id}");
+                Console.WriteLine($"\n[5064]:Created an identity with ID: {identity.Id}");
+                log.LogInformation($"\n[5064]:Created an identity with ID: {identity.Id}");
+                log.LogInformation($"\n[5064]:Before getting Access Token");
                 // Issue an access token with a validity of 24 hours and the "voip" scope for an identity
                 var response = await commClient.GetTokenAsync(identity, scopes: new[] { CommunicationTokenScope.VoIP });
-
+                log.LogInformation($"\n[5064]:After getting Access Token");
                 accessToken = response.Value;
+                log.LogInformation($"\n[5064]After getting Access Token {accessToken}");
             } catch (Exception ex)
             {
                 log.LogError($"Error acquiring token from AzureServiceTokenProvider: {ex.Message}");
@@ -268,6 +272,7 @@ namespace AzureFunctionForSplunk
                 {
                     throw new System.Net.Http.HttpRequestException($"StatusCode from Proxy Function: {response.StatusCode}, and reason: {response.ReasonPhrase}");
                 }
+                log.LogInformation($"\n[5064]:Logs sent to Splunk : Successful");
             }
             catch (System.Net.Http.HttpRequestException e)
             {
@@ -281,6 +286,7 @@ namespace AzureFunctionForSplunk
 
         public static async Task obHEC(List<string> standardizedEvents, ILogger log)
         {
+            log.LogInformation($"\n[5064]:Inside the function obHEC ");
             string splunkAddress = Utils.getEnvironmentVariable("splunkAddress");
             string splunkToken = Utils.getEnvironmentVariable("splunkToken");
             if (splunkAddress.Length == 0 || splunkToken.Length == 0)
@@ -300,7 +306,9 @@ namespace AzureFunctionForSplunk
             //ServicePointManager.Expect100Continue = true;
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             //ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(ValidateMyCert);
-
+            log.LogInformation($"\n[5064]:Splunk Address: {splunkAddress}");
+            log.LogInformation($"\n[5064]:Splunk Thumbprint: {splunkCertThumbprint}");
+            log.LogInformation($"\n[5064]:Splunk Token: {splunkToken}");
             var client = new SingleHttpClientInstance();
             foreach (string item in standardizedEvents)
             {
@@ -321,6 +329,7 @@ namespace AzureFunctionForSplunk
                     {
                         throw new System.Net.Http.HttpRequestException($"StatusCode from Splunk: {response.StatusCode}, and reason: {response.ReasonPhrase}");
                     }
+                    log.LogInformation($"\n[5064]:Logs sent to Splunk : Successful");
                 }
                 catch (System.Net.Http.HttpRequestException e)
                 {
