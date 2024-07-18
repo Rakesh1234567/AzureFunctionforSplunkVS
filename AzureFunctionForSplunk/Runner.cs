@@ -81,15 +81,20 @@ namespace AzureFunctionForSplunk
 
             if (decomposed.Count > 0)
             {
+                log.LogInformation("[5064] : Before sending mesasge to splunk");
                 var splunkMsgs = (SplunkEventMessages)Activator.CreateInstance(typeof(T2), outputEvents, log);
                 splunkMsgs.Log = log;
                 try
                 {
+                    log.LogInformation("[5064] : Before Ingest mesasge to splunk");
                     splunkMsgs.Ingest(decomposed.ToArray());
+                    log.LogInformation("[5064] : Before Emit mesasge to splunk");
                     await splunkMsgs.Emit();
+                    log.LogInformation("[5064] : After Emit mesasge to splunk");
                 }
                 catch (Exception exEmit)
                 {
+                    log.LogInformation($"[5064] : After Emit mesasge to splunk Exception {exEmit.Message}\n{exEmit.StackTrace}");
 
                     try
                     {
