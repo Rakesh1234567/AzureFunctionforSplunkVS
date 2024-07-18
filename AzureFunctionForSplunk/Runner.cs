@@ -82,6 +82,7 @@ namespace AzureFunctionForSplunk
             if (decomposed.Count > 0)
             {
                 var splunkMsgs = (SplunkEventMessages)Activator.CreateInstance(typeof(T2), outputEvents, log);
+                splunkMsgs.Log = log;
                 try
                 {
                     splunkMsgs.Ingest(decomposed.ToArray());
