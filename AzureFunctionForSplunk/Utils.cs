@@ -307,8 +307,8 @@ namespace AzureFunctionForSplunk
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             //ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(ValidateMyCert);
             log.LogInformation($"\n[5064]:Splunk Address: {splunkAddress}");
-            log.LogInformation($"\n[5064]:Splunk Thumbprint: {splunkCertThumbprint}");
-            log.LogInformation($"\n[5064]:Splunk Token: {splunkToken}");
+            //log.LogInformation($"\n[5064]:Splunk Thumbprint: {splunkCertThumbprint}");
+            //log.LogInformation($"\n[5064]:Splunk Token: {splunkToken}");
             var client = new SingleHttpClientInstance();
             foreach (string item in standardizedEvents)
             {
