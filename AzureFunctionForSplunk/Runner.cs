@@ -48,15 +48,18 @@ namespace AzureFunctionForSplunk
         {
             var batchId = Guid.NewGuid().ToString();
 
+            log.LogInformation($"[5064] :Before getEnvironmentVariable");
             bool logIncoming = Utils.getEnvironmentVariable("logIncomingBatches").ToLower() == "true";
-            
+            log.LogInformation($"[5064] :After getEnvironmentVariable");
+
             var azMonMsgs = (AzMonMessages)Activator.CreateInstance(typeof(T1), log);
             List<string> decomposed = null;
-
+            log.LogInformation($"[5064] :Created azMonMsgs");
             try
             {
+                log.LogInformation($"[5064] :Before DecomposeIncomingBatch");
                 decomposed = azMonMsgs.DecomposeIncomingBatch(messages);
-
+                log.LogInformation($"[5064] :After DecomposeIncomingBatch");
                 if (logIncoming)
                 {
                     try
@@ -79,16 +82,22 @@ namespace AzureFunctionForSplunk
                 throw;
             }
 
+            log.LogInformation($"[5064] : decomposed count {decomposed.Count}");
             if (decomposed.Count > 0)
             {
+                log.LogInformation("[5064] : Before sending mesasge to splunk");
                 var splunkMsgs = (SplunkEventMessages)Activator.CreateInstance(typeof(T2), outputEvents, log);
                 try
                 {
+                    log.LogInformation("[5064] : Before Ingest mesasge to splunk");
                     splunkMsgs.Ingest(decomposed.ToArray());
+                    log.LogInformation("[5064] : Before Emit mesasge to splunk");
                     await splunkMsgs.Emit();
+                    log.LogInformation("[5064] : After Emit mesasge to splunk");
                 }
                 catch (Exception exEmit)
                 {
+                    log.LogInformation($"[5064] : After Emit mesasge to splunk Exception {exEmit.Message}\n{exEmit.StackTrace}");
 
                     try
                     {
