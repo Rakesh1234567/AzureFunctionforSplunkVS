@@ -34,7 +34,7 @@ namespace AzureFunctionForSplunk
     {
         [FunctionName("EhMetricsExt")]
         public static async Task Run(
-            [EventHubTrigger("%input-hub-name-metrics%", Connection = "hubConnection", ConsumerGroup = "%consumer-group-metrics%")]string[] messages,
+            [EventHubTrigger("%input-hub-name-metrics%", Connection = "EventHubConnection", ConsumerGroup = "%consumer-group-metrics%")]string[] messages,
             [EventHub("%output-hub-name-proxy%", Connection = "outputHubConnection")]IAsyncCollector<string> outputEvents,
             IBinder blobFaultBinder,
             IBinder incomingBatchBinder,
